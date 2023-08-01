@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_partners/controllers/add_friends_controller.dart';
 
 import '../widgets/custom_form_field.dart';
@@ -14,6 +17,7 @@ class AddFriendsScreen extends StatefulWidget {
 }
 
 class _AddFriendsScreenState extends State<AddFriendsScreen> {
+  Uint8List? userImage;
   @override
   Widget build(BuildContext context) {
     final addFriendCtrl = Get.put<AddFriendsController>(AddFriendsController());
@@ -30,9 +34,11 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                 onTap: () {
                   showSheet();
                 },
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 55.0,
-                  backgroundImage: AssetImage('assets/images/friends.png'),
+                  backgroundImage: userImage == null
+                      ? const AssetImage('assets/images/friends.png')
+                      : MemoryImage(userImage!) as ImageProvider,
                 ),
               ),
               const SizedBox(
@@ -118,28 +124,42 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Column(
-                      children: [
-                        const Text('Camera'),
-                        Image.asset(
-                          'assets/images/camera.png',
-                          height: 50.0,
-                          width: 50.0,
-                        ),
-                      ],
+                    InkWell(
+                      onTap: () {
+                        pickeImageSource(ImageSource.camera).then((value) {
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          const Text('Camera'),
+                          Image.asset(
+                            'assets/images/camera.png',
+                            height: 50.0,
+                            width: 50.0,
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       width: 40.0,
                     ),
-                    Column(
-                      children: [
-                        const Text('Gallery'),
-                        Image.asset(
-                          'assets/images/gallery.png',
-                          height: 50.0,
-                          width: 50.0,
-                        ),
-                      ],
+                    InkWell(
+                      onTap: () {
+                        pickeImageSource(ImageSource.gallery).then((value) {
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          const Text('Gallery'),
+                          Image.asset(
+                            'assets/images/gallery.png',
+                            height: 50.0,
+                            width: 50.0,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 )
@@ -147,5 +167,16 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
             ),
           );
         });
+  }
+
+  Future<void> pickeImageSource(ImageSource source) async {
+    XFile? tempImage = await ImagePicker().pickImage(source: source);
+
+    if (tempImage == null) {
+      return;
+    } else {
+      userImage = await tempImage.readAsBytes();
+      setState(() {});
+    }
   }
 }
