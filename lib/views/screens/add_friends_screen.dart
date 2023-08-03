@@ -18,6 +18,8 @@ class AddFriendsScreen extends StatefulWidget {
 
 class _AddFriendsScreenState extends State<AddFriendsScreen> {
   Uint8List? userImage;
+
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final addFriendCtrl = Get.put<AddFriendsController>(AddFriendsController());
@@ -26,74 +28,87 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         width: Get.width,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  showSheet();
-                },
-                child: CircleAvatar(
-                  radius: 55.0,
-                  backgroundImage: userImage == null
-                      ? const AssetImage('assets/images/friends.png')
-                      : MemoryImage(userImage!) as ImageProvider,
-                ),
-              ),
-              const SizedBox(
-                height: 40.0,
-              ),
-              CustomFormField(
-                hint: 'Add Name',
-                controller: addFriendCtrl.nameCtrl,
-                validator: (val) {
-                  if (val!.isEmpty) {
-                    return '^please add name';
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              CustomFormField(
-                hint: 'Add Number',
-                controller: addFriendCtrl.mobileCtrl,
-                validator: (val) {
-                  if (val!.isEmpty) {
-                    return '^please add number';
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              CustomFormField(
-                hint: 'Add Description',
-                controller: addFriendCtrl.descCtrl,
-                maxLines: 10,
-                validator: (val) {
-                  if (val!.isEmpty) {
-                    return '^please add description';
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 30.0,
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  minimumSize: MaterialStatePropertyAll(
-                    Size(
-                      Get.width / 2,
-                      50.0,
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      showSheet();
+                    },
+                    child: CircleAvatar(
+                      radius: 55.0,
+                      backgroundImage: userImage == null
+                          ? const AssetImage('assets/images/friends.png')
+                          : MemoryImage(userImage!) as ImageProvider,
                     ),
                   ),
-                ),
-                child: Text('Save'),
+                  const SizedBox(
+                    height: 40.0,
+                  ),
+                  CustomFormField(
+                    hint: 'Add Name',
+                    controller: addFriendCtrl.nameCtrl,
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return '^please add name';
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  CustomFormField(
+                    hint: 'Add Number',
+                    controller: addFriendCtrl.mobileCtrl,
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return '^please add number';
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  CustomFormField(
+                    hint: 'Add Description',
+                    controller: addFriendCtrl.descCtrl,
+                    maxLines: 10,
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return '^please add description';
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Form Saved Successfull'),
+                          ),
+                        );
+                      }
+                    },
+                    style: ButtonStyle(
+                      minimumSize: MaterialStatePropertyAll(
+                        Size(
+                          Get.width / 2,
+                          50.0,
+                        ),
+                      ),
+                    ),
+                    child: Text('Save'),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
