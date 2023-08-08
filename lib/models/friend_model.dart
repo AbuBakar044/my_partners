@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 import 'package:hive/hive.dart';
 
+part 'friend_model.g.dart';
+
 
 @HiveType(typeId: 0)
 class FriendModel {

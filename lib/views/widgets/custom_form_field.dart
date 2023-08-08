@@ -7,12 +7,14 @@ class CustomFormField extends StatelessWidget {
   final String? hint;
   final String? Function(String?)? validator;
   final int? maxLines;
+  final TextInputType? keyboardType;
   const CustomFormField({
     super.key,
     this.controller,
     this.hint,
     this.validator,
     this.maxLines,
+    this.keyboardType,
   });
 
   @override
@@ -21,6 +23,7 @@ class CustomFormField extends StatelessWidget {
       controller: controller,
       validator: validator,
       maxLines: maxLines,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hint,
         border: const OutlineInputBorder(),
