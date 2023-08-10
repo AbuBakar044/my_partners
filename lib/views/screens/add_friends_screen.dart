@@ -1,8 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_partners/controllers/add_friends_controller.dart';
@@ -22,7 +20,6 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
   final nameCtrl = TextEditingController();
   final mobileCtrl = TextEditingController();
   final descCtrl = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
